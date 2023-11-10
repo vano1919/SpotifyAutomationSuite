@@ -6,9 +6,8 @@ import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
 
-
         features = "src/test/resources/features/ApiPlusUiFeatures",
         glue = {"org.epam.stepdefinitions"}
 )
-public class ApiPlusUiTestRunner extends AbstractTestNGCucumberTests {}
+public class ApiPlusUiTestRunner extends AbstractTestNGCucumberTests { }
 

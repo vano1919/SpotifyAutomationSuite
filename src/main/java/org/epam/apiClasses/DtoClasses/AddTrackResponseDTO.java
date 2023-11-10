@@ -4,5 +4,4 @@ import lombok.Getter;
 
 @Getter
 public class AddTrackResponseDTO {
-    private String snapshot_id;
-}
+    private String snapshot_id;}

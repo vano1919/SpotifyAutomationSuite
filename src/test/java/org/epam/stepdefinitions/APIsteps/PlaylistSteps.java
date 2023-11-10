@@ -152,9 +152,7 @@ public class PlaylistSteps {
     public void iConfirmThatTracksHaveBeenAddedToThePlaylist () {
         AddTrackResponseDTO addTrackResponseDTO = response.getBody ( ).as ( AddTrackResponseDTO.class );
         assertNotNull ( "The snapshot_id should not be null" , addTrackResponseDTO.getSnapshot_id ( ) );
-        assertFalse ( "The snapshot_id should not be empty" , addTrackResponseDTO.getSnapshot_id ( ).isEmpty ( ) );
-    }
-
+        assertFalse ( "The snapshot_id should not be empty" , addTrackResponseDTO.getSnapshot_id ( ).isEmpty ( ) );}
     @And("I confirm that tracks have been removed from the playlist")
     public void iConfirmThatTracksHaveBeenRemovedFromThePlaylist () {
         AddTrackResponseDTO addTrackResponseDTO = response.getBody ( ).as ( AddTrackResponseDTO.class );

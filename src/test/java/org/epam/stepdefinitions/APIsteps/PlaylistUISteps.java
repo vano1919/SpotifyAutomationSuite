@@ -22,7 +22,6 @@ public class PlaylistUISteps {
         loginPage.open ( );
     }
 
-
     @When("I have valid credentials ValidUsername and ValidPassword user click the Log In button")
     public void theUserHasValidCredentialsValidUsernameAndValidPasswordUserClicksTheLogInButton () {
         String username = UserCredentials.EMAIL.getValue ( );

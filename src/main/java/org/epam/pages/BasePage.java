@@ -75,7 +75,6 @@ public abstract class BasePage {
                 webDriver.navigate ( ).refresh ( );
             }
         }
-
         return "";
     }
 

@@ -26,4 +26,5 @@ Feature: Playlist Management
     When I add tracks to the playlist with URIs "spotify:track:4iV5W9uYEdYUVa79Axb7Rh,spotify:track:1301WleyT98MSxVHPZCA6M"
     When I remove tracks from the playlist with URIs "spotify:track:4iV5W9uYEdYUVa79Axb7Rh"
     Then I check for status code 200
+
     And I confirm that tracks have been removed from the playlist

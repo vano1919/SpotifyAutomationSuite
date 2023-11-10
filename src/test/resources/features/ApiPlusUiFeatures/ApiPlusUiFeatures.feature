@@ -13,6 +13,7 @@ Feature: Playlist Management Using UI Plus API
     And I search and add a track by "Whitney Elizabeth Houston" to the playlist "New Playlist"
     Then The added song by Whitney Houston should be displayed in the playlist.
 
+
   Scenario: Update an existing playlist's details
     And I update the playlist with a new name "Summer Hits Updated" with "Updated Test Playlist Description" and set its visibility to "true"
     Then I check for status code 200

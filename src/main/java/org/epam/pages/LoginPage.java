@@ -35,7 +35,6 @@ public class LoginPage extends BasePage {
         WebElement loginField = waitForElementCondition ( ExpectedConditions.visibilityOf ( loginInputFieldElement ) ,5);
         loginField.clear ( );
         passwordInputFieldElement.clear ( );
-
         loginField.sendKeys ( login );
         passwordInputFieldElement.sendKeys ( password );
 
