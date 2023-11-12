@@ -22,6 +22,11 @@ public class LoginPage extends BasePage {
     @FindBy(xpath = "//div[@data-encore-id=\"banner\"]/span[contains(@class, 'Message-sc-15vkh7g-0')]")
     private WebElement wrongCredentialsErrorMessageElement;
 
+    @FindBy(xpath = "//*[@id=\"username-error\"]")
+    private WebElement emptyUsernameErrorMessageElement;
+
+    @FindBy(xpath = "//*[@id=\"password-error\"]")
+    private WebElement emptyPasswordErrorMessageElement;
 
     public LoginPage ( WebDriver webDriver ) {
         super ( webDriver );
@@ -32,9 +37,10 @@ public class LoginPage extends BasePage {
     }
 
     public void loginInToSpotify ( String login , String password ) {
-        WebElement loginField = waitForElementCondition ( ExpectedConditions.visibilityOf ( loginInputFieldElement ) ,5);
+        WebElement loginField = waitForElementCondition ( ExpectedConditions.visibilityOf ( loginInputFieldElement ),5 );
         loginField.clear ( );
         passwordInputFieldElement.clear ( );
+
         loginField.sendKeys ( login );
         passwordInputFieldElement.sendKeys ( password );
 
@@ -44,17 +50,38 @@ public class LoginPage extends BasePage {
             } catch (Exception ignored) {
             }
 
+            // Added this loop to avoid spotify
+            // logging unstable behaviour, WHILE
+            // ATTEMPTING LOGGING - MULTIPLE TIMEs!
+
             try {
-                String wrongCredentialsMessage = wrongCredentialsErrorMessageElement.getText ( );
+
+                String wrongCredentialsMessage =  wrongCredentialsErrorMessageElement.getText ( );
                 if (Objects.equals ( wrongCredentialsMessage , "Incorrect username or password." )) {
                     break;
                 }
+
             } catch (Exception ignored) {
             }
         } while (webDriver.getCurrentUrl ( ).contains ( "login" ));
     }
 
+    public void loginWithEmptyCredentialsToSpotify () {
+        clearFieldUsingKey ( loginInputFieldElement );
+        clearFieldUsingKey ( passwordInputFieldElement );
+    }
+
+    public String getEmptyUsernameErrorMessage () {
+        return getTextFromElement ( emptyUsernameErrorMessageElement );
+    }
+
+    public String getEmptyPasswordErrorMessage () {
+        return getTextFromElement ( emptyPasswordErrorMessageElement );
+    }
+
+    public String getWrongCredentialsErrorMessage () {
+        return getTextFromElement ( wrongCredentialsErrorMessageElement );
+    }
 
 }
-
 

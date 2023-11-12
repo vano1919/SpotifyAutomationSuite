@@ -15,8 +15,7 @@ public enum UserCredentials {
     EMAIL ( "" ),
     PASSWORD ( "" ),
     USERID( "" ),
-    TOKEN ( "" );
-
+    TOKEN ( "");
     private String value;
 
     UserCredentials(String value) {
@@ -29,7 +28,8 @@ public enum UserCredentials {
         EMAIL.value = credentialsMap.getOrDefault("EMAIL", "DEFAULT_EMAIL");
         PASSWORD.value = credentialsMap.getOrDefault("PASSWORD", "DEFAULT_PASSWORD");
         USERID.value = credentialsMap.getOrDefault ( "USERID" , "DEFAULT_USERID");
-        TOKEN.value = credentialsMap.getOrDefault("TOKEN", "DEFAULT_USER_ID");
+        TOKEN.value = credentialsMap.getOrDefault("TOKEN", "DEFAULT_TOKEN");
+
     }
 
     private static Map<String, String> loadCredentials() {

@@ -13,21 +13,29 @@ public class BaseSteps {
     public static WebDriver webDriver;
 
     @Before
-    public void initWebDriver(){
-        webDriver = new WebDriverFactory ().getWebDriver ();
-        webDriver.manage ().window ().maximize ();}
-
+    public void initWebDriver () {
+        webDriver = new WebDriverFactory ( ).getWebDriver ( );
+        webDriver.manage ( ).window ( ).maximize ( );
+    }
 
     @After
-    public void afterScenario() {
-        webDriver.quit();
-        PAGES_STORAGE.clear();
-    }
-    public static void putInStorage(String key, String value) {
-        PAGES_STORAGE.put(key, value);
+    public void afterScenario () {
+        try {
+
+            Thread.sleep ( 3000 );
+        } catch (InterruptedException e) {
+            e.printStackTrace ( );
+        }
+
+        webDriver.quit ( );
+        PAGES_STORAGE.clear ( );
     }
 
-    public static String getFromStorage(String key) {
-        return PAGES_STORAGE.get(key);
+    public static void putInStorage ( String key , String value ) {
+        PAGES_STORAGE.put ( key , value );
+    }
+
+    public static String getFromStorage ( String key ) {
+        return PAGES_STORAGE.get ( key );
     }
 }

@@ -9,6 +9,26 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class MainPage extends BasePage {
 
+
+    @FindBy(xpath = "//button[contains(@class, 'Button-sc-1dqy6lx-0') and @aria-label='Create playlist or folder']")
+    private WebElement playlistCreatorButtonElement;
+
+    @FindBy(xpath = "//span[text()='Create a new playlist']")
+    private WebElement createPlaylistButtonElement;
+
+    @FindBy(xpath = "//button[contains(@aria-label, 'Edit details')]")
+    private WebElement playlistNameInPlaylistElement;
+
+    @FindBy(xpath = "//input[@data-testid='playlist-edit-details-name-input']")
+    private WebElement editPlaylistFieldElement;
+
+    @FindBy(xpath = "//p[contains(@id, 'listrow-title-spotify:playlist:') and contains(., 'Playlist')]")
+    private WebElement playlistNameInMainFrameElement;
+
+    @FindBy(xpath = "//p[contains(@id, 'spotify:playlist')]")
+    private WebElement playlistNameInSideFrameElement;
+
+
     @FindBy(xpath = "//div[contains(@aria-labelledby, 'spotify:playlist') and @role='button']")
     private WebElement playlistButtonInSideFrameElement;
 
@@ -26,11 +46,19 @@ public class MainPage extends BasePage {
     @FindBy(xpath = "//div[@role='row' and @aria-rowindex='2']")
     private WebElement addedTrackNameElement;
 
+    @FindBy(xpath = "//h1[contains(text(), \"find something for your playlis\")]")
+    private WebElement addedTrackStatusElement;
+
+    @FindBy(xpath = "//button[contains(., 'Remove from this playlist')]")
+    private WebElement removedTrackButtonElement;
+
+
     @FindBy(xpath = "//button[.//span[text()='Delete']]")
     private WebElement confirmDeletePlaylistButtonElement;
 
     @FindBy(xpath = "//span[normalize-space(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'))='create your first playlist']")
     private WebElement noPlaylistMessageElement;
+
 
     public MainPage ( WebDriver webDriver ) {
         super ( webDriver );
@@ -38,14 +66,48 @@ public class MainPage extends BasePage {
     }
 
     public void open () {
-        waitForUrl ( "status" , true );
         webDriver.get ( LinksEnum.MAIN_PAGE_URL.getUrl ( ) );
     }
 
+    public void createPlaylist () {
+        final int MAX_RETRIES = 10;  // Let's limit the number of retries to avoid infinite loops.
+        int retries = 0;
+
+        clickElement ( playlistCreatorButtonElement );
+        clickElement ( createPlaylistButtonElement );
+
+        while (retries < MAX_RETRIES) {
+            if (!waitForUrl ( "playlist" ,true,5)) {
+                // The URL doesn't contain "playlist", so let's try to create it.
+                clickElement ( playlistCreatorButtonElement );
+                clickElement ( createPlaylistButtonElement );
+                retries++;
+            } else {
+                // The URL contains "playlist" refresh, and so we're done.
+                break;
+            }
+        }
+
+    }
+
+    public boolean isPlaylistAdded () {
+        waitForUrl ( "playlist" , true ,30);
+
+        String playlistNameFromMainFrame = getTextFromElement ( playlistNameInMainFrameElement );
+        String xpathExpression = String.format ( "//span[contains(text(),'%s')]" , playlistNameFromMainFrame );
+        return !getTextFromElement ( getElementFromDynamicXpath ( xpathExpression ) ).isBlank ( );
+    }
+
+
+    public String editPlaylist ( String newName ) {
+        clickElement ( playlistNameInPlaylistElement );
+        inputText ( editPlaylistFieldElement , newName );
+        return getTextFromElement ( playlistNameInPlaylistElement );
+    }
 
     public void addTrackToPlaylist ( String artist , String playlistName ) {
         int attempts = 0;
-        int maxAttempts = 5;
+        int maxAttempts = 15;
         boolean trackAdded = false;
 
         while (attempts < maxAttempts && !trackAdded) {
@@ -55,7 +117,7 @@ public class MainPage extends BasePage {
                 inputText ( searchFieldToFindTrackElement , artist );
 
                 dragAndDropElementUntilUrlChanges (
-                        waitForElementCondition ( ExpectedConditions.elementToBeClickable ( firstTrackToAddElement ) ,5) ,
+                        waitForElementCondition ( ExpectedConditions.elementToBeClickable ( firstTrackToAddElement ) , 5 ) ,
                         getElementFromDynamicXpath ( xpathExpression )
                 );
 
@@ -72,9 +134,24 @@ public class MainPage extends BasePage {
     }
 
     public String checkPlaylistForAddedTrack () {
-        String trackName = getTextFromElement ( addedTrackNameElement );
-        clickElement ( addedTrackNameElement );
-        return trackName;
+        return getTextFromElement ( addedTrackNameElement );
+    }
+
+    public void removeTrackFromThePlayList () {
+        waitForUrl ( "playlist" , true ,30);
+        getTextFromElement ( addedTrackNameElement );
+        contextClick ( addedTrackNameElement );
+        clickElement ( removedTrackButtonElement );
+    }
+
+
+    public String checkPlaylistForRemovedTrack () {
+        return getTextFromElement ( addedTrackStatusElement );
+    }
+
+
+    public void getJustCreatedPlaylistName () {
+        getTextFromElement ( playlistNameInSideFrameElement );
     }
 
     public String checkPlaylistForUpdatedDetails ( String playlistName ) {
@@ -94,7 +171,7 @@ public class MainPage extends BasePage {
         return updatedPlaylistName;
     }
 
-    public void removeJustCreatedPlaylist () {
+    public boolean removeJustCreatedPlaylist () {
         int exceptionCounter = 0;
         while (true) {
             try {
@@ -119,9 +196,8 @@ public class MainPage extends BasePage {
 
 
         }
-
+        return true;
     }
-
 
 }
 

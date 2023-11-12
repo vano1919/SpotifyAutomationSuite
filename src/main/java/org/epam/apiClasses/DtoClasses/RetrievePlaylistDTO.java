@@ -1,4 +1,4 @@
-package org.epam.apiClasses.DtoClasses;
+package org.epam.apiClasses.dtoClasses;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;

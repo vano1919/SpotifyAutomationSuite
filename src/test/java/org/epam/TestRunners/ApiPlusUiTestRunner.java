@@ -1,4 +1,4 @@
-package org.epam.TestRunners;
+package org.epam.testRunners;
 
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
@@ -6,8 +6,9 @@ import io.cucumber.testng.CucumberOptions;
 
 @CucumberOptions(
 
-        features = "src/test/resources/features/ApiPlusUiFeatures",
+        features = "src/test/resources/features/apiPlusUiFeatures",
         glue = {"org.epam.stepdefinitions"}
 )
-public class ApiPlusUiTestRunner extends AbstractTestNGCucumberTests { }
+public class ApiPlusUiTestRunner extends AbstractTestNGCucumberTests {
+}
 
