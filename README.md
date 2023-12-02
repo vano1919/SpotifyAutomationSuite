@@ -1,19 +1,27 @@
 # SpotifyAutomationSuite
 
-SpotifyAutomationSuite is a comprehensive web automation framework designed for testing the Spotify web application. It leverages the power of Selenium WebDriver for browser automation, Cucumber for behavior-driven development, and REST Assured for API interactions.
+Welcome to SpotifyAutomationSuite - a Java-based test automation framework designed to facilitate web and API testing for the Spotify web application. This framework incorporates Selenium WebDriver for robust browser interaction, Cucumber for behavior-driven development (BDD), and REST Assured for API testing to ensure the Spotify application runs smoothly across different web environments.
 
 ## Features
 
-- User Authentication Testing: Automates login procedures and error handling.
-- Playlist Management: Facilitates the creation, modification, and deletion of music playlists.
-- Track Management: Provides capabilities to add and remove tracks from playlists.
-- Continuous Integration Ready: Structured to integrate with CI/CD pipelines for automated test execution.
-- Cross-Browser Support: Configured to run tests across multiple browsers.
+- **Automated Web Testing**: Leverages Selenium WebDriver to simulate user interactions with the Spotify web application.
+- **Behavior-Driven Development**: Utilizes Cucumber to write tests in a way that can be understood by anyone familiar with the domain, ensuring tests are readable and maintainable.
+- **API Testing**: Incorporates REST Assured to test Spotify's RESTful APIs with ease.
+- **Cross-Browser Compatibility**: Configured to support multiple browsers, aiding in comprehensive test coverage.
+- **Continuous Integration Compatibility**: Ready for integration with CI/CD pipelines like Jenkins, CircleCI, etc., for automated test execution and deployment.
+- **Secure Testing**: Uses a credentials file ignored by Git to maintain security while testing with real accounts.
 
-## Getting Started
+## Prerequisites
 
-To get started with SpotifyAutomationSuite, clone the repository and ensure you have Maven installed.
+Before you begin, ensure you have the following installed on your system:
+- Java 17 or higher
+- Maven
+- Git
+
+## Installation
+
+Clone the repository to your local machine:
 
 ```bash
-git clone [repository-url]
+git clone https://github.com/vano1919/SpotifyAutomationSuite.git
 cd SpotifyAutomationSuite
