@@ -45,13 +45,19 @@ public class PlaylistSteps {
         );
 
         playlist = response.as ( RetrievePlaylistDTO.class );
-        storePlaylistDetails ( name , description , isPublic );
+        BaseSteps.putInStorage ( "playlistName" , name );
+        BaseSteps.putInStorage ( "PlaylistDescription" , description );
+        BaseSteps.putInStorage ( "isPublic" , isPublic );
+        BaseSteps.putInStorage ( "playlistID" , playlist.getId ( ) );
     }
 
     @And("I should see the playlist details")
     public void iShouldSeeThePlaylistDetails () {
         playlist = response.as ( RetrievePlaylistDTO.class );
-        verifyPlaylistDetails ( );
+        assertEquals ( BaseSteps.getFromStorage ( "playlistName" ) , playlist.getName ( ) );
+        assertEquals ( BaseSteps.getFromStorage ( "PlaylistDescription" ) , playlist.getDescription ( ) );
+        assertEquals ( Boolean.parseBoolean ( BaseSteps.getFromStorage ( "isPublic" ) ) , playlist.isPublic ( ) );
+        BaseSteps.putInStorage ( "playlistID" , playlist.getId ( ) );
     }
 
     @And("I update the playlist with a new name {string} with {string} and set its visibility to {string}")
@@ -100,41 +106,16 @@ public class PlaylistSteps {
     @And("I confirm that tracks have been added to the playlist")
     public void iConfirmTracksAdded () {
         AddTrackResponseDTO addTrackResponse = response.getBody ( ).as ( AddTrackResponseDTO.class );
-        assertSnapshotId ( addTrackResponse.getSnapshot_id ( ) );
+
+        assertNotNull ( "The snapshot_id should not be null" , addTrackResponse.getSnapshot_id ( ) );
+        assertFalse ( "The snapshot_id should not be empty" , addTrackResponse.getSnapshot_id ( ).isEmpty ( ) );
     }
 
     @And("I confirm that tracks have been removed from the playlist")
     public void iConfirmTracksRemoved () {
         AddTrackResponseDTO addTrackResponse = response.getBody ( ).as ( AddTrackResponseDTO.class );
-        assertSnapshotId ( addTrackResponse.getSnapshot_id ( ) );
-        confirmTracksRemoval ( );
-    }
-
-    @Then("I check for status code {int}")
-    public void iCheckForStatusCode ( int expectedStatusCode ) {
-        assertEquals ( expectedStatusCode , response.getStatusCode ( ) );
-    }
-
-    private void storePlaylistDetails ( String name , String description , String isPublic ) {
-        BaseSteps.putInStorage ( "playlistName" , name );
-        BaseSteps.putInStorage ( "PlaylistDescription" , description );
-        BaseSteps.putInStorage ( "isPublic" , isPublic );
-        BaseSteps.putInStorage ( "playlistID" , playlist.getId ( ) );
-    }
-
-    private void verifyPlaylistDetails () {
-        assertEquals ( BaseSteps.getFromStorage ( "playlistName" ) , playlist.getName ( ) );
-        assertEquals ( BaseSteps.getFromStorage ( "PlaylistDescription" ) , playlist.getDescription ( ) );
-        assertEquals ( Boolean.parseBoolean ( BaseSteps.getFromStorage ( "isPublic" ) ) , playlist.isPublic ( ) );
-        BaseSteps.putInStorage ( "playlistID" , playlist.getId ( ) );
-    }
-
-    private void assertSnapshotId ( String snapshotId ) {
-        assertNotNull ( "The snapshot_id should not be null" , snapshotId );
-        assertFalse ( "The snapshot_id should not be empty" , snapshotId.isEmpty ( ) );
-    }
-
-    private void confirmTracksRemoval () {
+        assertNotNull ( "The snapshot_id should not be null" , addTrackResponse.getSnapshot_id ( ) );
+        assertFalse ( "The snapshot_id should not be empty" , addTrackResponse.getSnapshot_id ( ).isEmpty ( ) );
         String playlistId = BaseSteps.getFromStorage ( "playlistID" );
         List<String> removedUris = List.of ( BaseSteps.getFromStorage ( "removedTrackUris" ).split ( "," ) );
 
@@ -143,9 +124,14 @@ public class PlaylistSteps {
             return removedUris.stream ( ).noneMatch ( trackUris::contains );
         };
 
-        response = playlistClient.sendRequestWithRetry (
-                () -> playlistClient.getPlaylistTracksRequest ( playlistId ).get ( ) ,
-                tracksRemovedConfirmation
-        );
+        response = playlistClient.sendRequestWithRetry ( () -> playlistClient.getPlaylistTracksRequest ( playlistId ).get ( ) , tracksRemovedConfirmation );
     }
+
+    @Then("I check for status code {int}")
+    public void iCheckForStatusCode ( int expectedStatusCode ) {
+        assertEquals ( expectedStatusCode , response.getStatusCode ( ) );
+    }
+
+
 }
+
